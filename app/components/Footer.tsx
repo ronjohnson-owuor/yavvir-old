@@ -8,6 +8,7 @@ function Footer() {
     useEffect(()=>{
     AOS.init();
   },[])
+  // animation on the footer
   return (
     <div data-aos="fade-up"  className='mt-32 bg-beige_light h-[250px] overflow-clip w-full grid grid-cols-3 place-items-center
     '>
