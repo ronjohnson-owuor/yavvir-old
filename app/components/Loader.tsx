@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
+import no_background from "../images/logo_no_background.svg";
+import logo from "../images/logo.svg";
 
 interface props{
     text?:string
 }
 function Loader({text}:props) {
   const [no_bg, setno_bg] = useState(true);
-  const [background, setBackground] = useState("logo_no_background.svg");
+  const [background, setBackground] = useState(no_background);
 
   useEffect(() => {
     const loader = setInterval(() => {
@@ -15,7 +17,7 @@ function Loader({text}:props) {
   }, []);
 
   useEffect(() => {
-    setBackground(no_bg ? "logo.svg" : "logo_no_background.svg");
+    setBackground(no_bg ? logo : no_background);
   }, [no_bg]);
 
   return (

@@ -1,0 +1,18 @@
+
+@media (max-width:645px) {
+    #nav_buttons{
+        width: 100px;
+    }
+}
+
+@media (max-width:320px) {
+    #nav_buttons{
+        width: 60px;
+    }
+}
+
+@media (max-width:500px) {
+    #student_btn,#parent_btn,#teacher_btn{
+        font-size: 12px;
+    }
+}

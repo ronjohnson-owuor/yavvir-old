@@ -11,7 +11,7 @@ function Footer() {
   return (
     <div
       data-aos="fade-up"
-      className="mt-32 bg-beige_light h-[250px] overflow-clip w-full grid grid-cols-3 place-items-center
+      className="mt-32 bg-beige_light min-h-[250px] xl:overflow-clip w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 place-items-center
     "
     >
       <div>

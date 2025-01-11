@@ -4,15 +4,16 @@ import { GiTeacher } from "react-icons/gi";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import tutor  from "../images/tutor.svg";
+import "../css/mediaqueries.css";
 
 function Teachers() {
   useEffect(() => {
     AOS.init();
   }, []);
   return (
-    <div className="my-32 grid grid-cols-2 gap-10 w-[90%] mx-[5%]">
-      <div>
-        <img data-aos="zoom-in-left" src={tutor} alt="tutor" />
+    <div className="my-32 grid md:grid-cols-2 gap-10 w-[90%] mx-[5%]">
+      <div className="w-full h-full">
+        <img className="w-full h-full" data-aos="zoom-in-left" src={tutor} alt="tutor" />
       </div>
       <div data-aos="zoom-in">
         <h3 className="font-extrabold text-[30px] my-4">
@@ -60,7 +61,7 @@ function Teachers() {
             learning experience
           </li>
         </ul>
-        <button className="w-[80%] h-[50px] text-white shadow-sm rounded-md my-4 bg-main flex justify-center items-center">
+        <button id="teacher_btn"  className="w-[80%] h-[50px] text-white shadow-sm rounded-md my-4 bg-main flex justify-center items-center">
           <GiTeacher />
           &nbsp;become a yavvir educator
         </button>

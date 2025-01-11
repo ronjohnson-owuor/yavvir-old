@@ -3,6 +3,7 @@ import { CiCircleCheck } from "react-icons/ci";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import parent  from "../images/parent.svg";
+import "../css/mediaqueries.css";
 
 function Parents() {
   useEffect(() => {
@@ -12,9 +13,9 @@ function Parents() {
   return (
     <div
       data-aos="fade-right"
-      className="my-32 grid grid-cols-2 gap-10 w-[90%] mx-[5%]"
+      className="my-32 grid md:grid-cols-2  gap-10 w-[90%] mx-[5%]"
     >
-      <div data-aos="flip-right">
+      <div className="order-last md:order-first" data-aos="flip-right">
         <h3 className="font-extrabold text-[30px] my-4">
           Keep your child busy at home.
         </h3>
@@ -69,12 +70,12 @@ function Parents() {
           </li>
         </ul>
 
-        <button className="w-[80%] h-[50px] text-white shadow-sm rounded-md my-4 bg-main flex justify-center items-center">
+        <button id="parent_btn"  className="w-[80%] h-[50px] text-white shadow-sm rounded-md my-4 bg-main flex justify-center items-center">
           register your child today
         </button>
       </div>
-      <div>
-        <img src={parent} alt="parent" />
+      <div className="w-full h-full">
+        <img src={parent} alt="parent" className="w-full h-full" />
       </div>
     </div>
   );

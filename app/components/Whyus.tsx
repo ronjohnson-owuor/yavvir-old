@@ -17,7 +17,7 @@ function Whyus() {
         <center><h1 className='font-bold text-[40px] my-4'>Why yavvir?</h1></center>
 
         {/* listing main boxes */}
-        <div className='grid grid-cols-2 gap-10 w-[90%] mx-[5%] p-4'>
+        <div className='grid grid-cols-1 sm:grid-cols-2 gap-10 w-[90%] mx-[5%] p-4'>
             <div data-aos="flip-right">
             <SiGoogleclassroom className='text-[60px] text-center w-full my-4 text-beige' />
             <h3 className='font-bold my-4 w-full text-center text-main'>quality virtual classroom</h3>
