@@ -1,16 +1,20 @@
 import React, { useEffect } from "react";
 import { CiCircleCheck } from "react-icons/ci";
-import AOS from 'aos';
-import 'aos/dist/aos.css';
+import AOS from "aos";
+import "aos/dist/aos.css";
+import parent  from "../images/parent.svg";
 
 function Parents() {
-    useEffect(()=>{
-      AOS.init();
-    },[]);
-    
+  useEffect(() => {
+    AOS.init();
+  }, []);
+
   return (
-    <div data-aos="fade-right"  className="my-32 grid grid-cols-2 gap-10 w-[90%] mx-[5%]">
-      <div  data-aos="flip-right">
+    <div
+      data-aos="fade-right"
+      className="my-32 grid grid-cols-2 gap-10 w-[90%] mx-[5%]"
+    >
+      <div data-aos="flip-right">
         <h3 className="font-extrabold text-[30px] my-4">
           Keep your child busy at home.
         </h3>
@@ -24,35 +28,43 @@ function Parents() {
         </p>
         <ul className="my-4 text-grey text-sm">
           <li className="flex items-center my-2">
-           
             <p className="font-bold text-main">
               <CiCircleCheck />
             </p>
-            &nbsp; <p>Track your child's learning progress with easeEarn
-            competitive rates for your expertise</p>
-          </li>
-          <li className="flex items-center my-2">
-           
-            <p className="font-bold text-main">
-              <CiCircleCheck />
-            </p>
-            &nbsp; <p>Quality educational materials and resources to aid their studies</p>
-          </li>
-          <li className="flex items-center my-2">
-           
-            <p className="font-bold text-main">
-              <CiCircleCheck />
-            </p>
-            &nbsp; <p>Stay informed with updates and performance reports and daily notifications
+            &nbsp;{" "}
+            <p>
+              Track your child's learning progress with easeEarn competitive
+              rates for your expertise
             </p>
           </li>
           <li className="flex items-center my-2">
-           
             <p className="font-bold text-main">
               <CiCircleCheck />
             </p>
-            &nbsp; <p>
-            There are quizzes test and exams offered by the teachers,you will be receiving scores and feedback of your son or daughter instantly and dailly
+            &nbsp;{" "}
+            <p>
+              Quality educational materials and resources to aid their studies
+            </p>
+          </li>
+          <li className="flex items-center my-2">
+            <p className="font-bold text-main">
+              <CiCircleCheck />
+            </p>
+            &nbsp;{" "}
+            <p>
+              Stay informed with updates and performance reports and daily
+              notifications
+            </p>
+          </li>
+          <li className="flex items-center my-2">
+            <p className="font-bold text-main">
+              <CiCircleCheck />
+            </p>
+            &nbsp;{" "}
+            <p>
+              There are quizzes test and exams offered by the teachers,you will
+              be receiving scores and feedback of your son or daughter instantly
+              and dailly
             </p>
           </li>
         </ul>
@@ -62,7 +74,7 @@ function Parents() {
         </button>
       </div>
       <div>
-        <img src="../../public/parent.svg" alt="parent" />
+        <img src={parent} alt="parent" />
       </div>
     </div>
   );
