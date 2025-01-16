@@ -14,7 +14,7 @@ function Homenav() {
         <Link className="hover:text-main" to="">
           <li>learners</li>
         </Link>
-        <Link className="hover:text-main" to="">
+        <Link className="hover:text-main" to="/teacher/signup">
           <li>teachers</li>
         </Link>
         <Link className="hover:text-main" to="">

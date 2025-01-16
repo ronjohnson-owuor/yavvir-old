@@ -5,6 +5,7 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import tutor  from "../images/tutor.svg";
 import "../css/mediaqueries.css";
+import { Link } from "@remix-run/react";
 
 function Teachers() {
   useEffect(() => {
@@ -61,10 +62,10 @@ function Teachers() {
             learning experience
           </li>
         </ul>
-        <button id="teacher_btn"  className="w-[80%] h-[50px] text-white shadow-sm rounded-md my-4 bg-main flex justify-center items-center">
+        <Link to="/teacher/signup"><button id="teacher_btn"  className="w-[80%] h-[50px] text-white shadow-sm rounded-md my-4 bg-main flex justify-center items-center">
           <GiTeacher />
           &nbsp;become a yavvir educator
-        </button>
+        </button></Link>
       </div>
     </div>
   );
