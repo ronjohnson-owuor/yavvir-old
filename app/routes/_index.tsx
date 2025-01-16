@@ -1,6 +1,6 @@
+import React from "react";
 import type { MetaFunction } from "@remix-run/node";
-import Home from "~/components/Home";
-import Loader from "~/components/Loader";
+import Home from "../components/Home";
 
 export const meta: MetaFunction = () => {
   return [
