@@ -2,8 +2,9 @@ import React, { useEffect } from "react";
 import { CiCircleCheck } from "react-icons/ci";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import parent  from "../images/parent.svg";
+import parent from "../images/parent.svg";
 import "../css/mediaqueries.css";
+import { Link } from "@remix-run/react";
 
 function Parents() {
   useEffect(() => {
@@ -70,9 +71,14 @@ function Parents() {
           </li>
         </ul>
 
-        <button id="parent_btn"  className="w-[80%] h-[50px] text-white shadow-sm rounded-md my-4 bg-main flex justify-center items-center">
-          register your child today
-        </button>
+        <Link to="/signup">
+          <button
+            id="parent_btn"
+            className="w-[80%] h-[50px] text-white shadow-sm rounded-md my-4 bg-main flex justify-center items-center"
+          >
+            register your child today
+          </button>
+        </Link>
       </div>
       <div className="w-full h-full">
         <img src={parent} alt="parent" className="w-full h-full" />

@@ -62,7 +62,7 @@ function Teachers() {
             learning experience
           </li>
         </ul>
-        <Link to="/teacher/signup"><button id="teacher_btn"  className="w-[80%] h-[50px] text-white shadow-sm rounded-md my-4 bg-main flex justify-center items-center">
+        <Link to="/signup"><button id="teacher_btn"  className="w-[80%] h-[50px] text-white shadow-sm rounded-md my-4 bg-main flex justify-center items-center">
           <GiTeacher />
           &nbsp;become a yavvir educator
         </button></Link>

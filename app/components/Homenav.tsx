@@ -11,13 +11,13 @@ function Homenav() {
         <h3 className="font-bold text-xl">yavvir</h3>
       </div>
       <ul className="flex gap-4 hidden sm:flex text-sm md:text-md items-center">
-        <Link className="hover:text-main" to="">
+        <Link className="hover:text-main" to="/signup">
           <li>learners</li>
         </Link>
-        <Link className="hover:text-main" to="/teacher/signup">
+        <Link className="hover:text-main" to="/signup">
           <li>teachers</li>
         </Link>
-        <Link className="hover:text-main" to="">
+        <Link className="hover:text-main" to="/signup">
           <li>parents</li>
         </Link>
         <Link className="hover:text-main hidden md:block" to="">
@@ -31,9 +31,9 @@ function Homenav() {
         <button id="nav_buttons"  className="bg-beige_light text-sm sm:text-md w-[60px]  md:w-[80px] shadow-sm rounded-md h-[35px]">
           login
         </button>
-        <button id="nav_buttons"  className="bg-main text-sm sm:text-md w-[60px]  md:w-[80px] rounded-md h-[35px] shadow-sm hover:text-white transition-all">
-          signin
-        </button>
+        
+          <Link to="/signup"><button id="nav_buttons"  className="bg-main text-sm sm:text-md w-[60px]  md:w-[80px] rounded-md h-[35px] shadow-sm hover:text-white transition-all">signup</button></Link>
+        
       </div>
     </div>
   );

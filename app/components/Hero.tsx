@@ -4,6 +4,7 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import hero  from "../images/hero.svg";
 import "../css/mediaqueries.css";
+import { Link } from "@remix-run/react";
 
 function Hero() {
   useEffect(() => {
@@ -27,10 +28,10 @@ function Hero() {
           teachers. Get access to top-quality revision materials that will
           empower you to excel and reach your full potential!
         </p>
-        <button id="student_btn"  className="w-[80%]  flex items-center justify-center h-[50px] rounded-md bg-main my-10 mt-20">
+       <Link className="w-full" to="/signup"> <button id="student_btn"  className="w-[80%]  flex items-center justify-center h-[50px] rounded-md bg-main my-10 mt-20">
           <PiStudent />
           &nbsp;<p>become a yavvir's student</p>
-        </button>
+        </button></Link>
       </div>
     </div>
   );
