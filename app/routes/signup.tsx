@@ -204,20 +204,20 @@ function Teachersignup() {
 
       {/* next step of signup with google */}
       {proceed && (
-        <div className="w-[80%] min-h-[600px] shadow-md rounded-md mx-[10%]">
+        <div className=" md:w-[80%] w-full min-h-[600px] md:shadow-md rounded-md md:mx-[10%]">
           <div className="w-full py-4 flex items-center justify-center flex-col">
             <img src={picture} alt="user profile" className="rounded-md" />
             <h1 className="text-[30px] my-10 font-bold mb-2">{username}</h1>
             <p className="mb-4 text-main">finish your account setup</p>
           </div>
-          <div className="grid grid-cols-2 place-items-center w-[70%] mx-[15%]">
+          <div className="grid grid-cols-1 xl:grid-cols-2 place-items-center w-full md:w-[70%] md:mx-[15%] p-2">
             <input
               type="text"
               className="bg-transparent w-full border text-center h-[40px] rounded-md"
               disabled
               value={`email: ${data?.email}`}
             />
-            <div className="flex items-center w-[80%] ">
+            <div className="flex items-center w-full my-2 xl:w-[80%] ">
               <input
                 className="bg-transparent w-full px-4 border text-center h-[40px] rounded-md"
                 type="text"
@@ -248,8 +248,8 @@ function Teachersignup() {
                 </button>
               </div>
             </div>
-            <div className="flex items-center flex-col">
-              <label className="flex items-center my-2" htmlFor="password">
+            <div className="flex items-center flex-col w-full xl:w-[80%]">
+              <label className="flex items-center my-2" htmlFor="phone">
                 <RiLockPasswordLine className="text-md" /> &nbsp;phone number
                 (EG: +2547***)
               </label>
@@ -269,9 +269,9 @@ function Teachersignup() {
               </div>
             </div>
           </div>
-          <div className="w-full flex flex-col items-center justify-center my-10">
-            <h3 className="font-bold my-2">what account are you creating?</h3>
-            <div className="grid grid-cols-2 my-2">
+          <div className="w-full md:flex flex-col md:items-center md:justify-center my-10 px-2 gap-2">
+            <h3 className="font-bold my-2 w-full text-center">what account are you creating?</h3>
+            <div className=" flex w-full items-center justify-center text-md my-2 ">
               <input
                 type="radio"
                 className="accent-main bg-white"
@@ -282,7 +282,7 @@ function Teachersignup() {
               />
               <p>student account</p>{" "}
             </div>
-            <div className="grid grid-cols-2 my-2">
+            <div className=" flex w-full items-center justify-center text-md my-2">
               <input
                 type="radio"
                 className="accent-main bg-white"
@@ -293,7 +293,7 @@ function Teachersignup() {
               />
               <p>teacher account</p>{" "}
             </div>
-            <div className="grid grid-cols-2  my-2">
+            <div className=" flex w-full items-center justify-center text-md  my-2">
               <input
               checked={checked === 2}
                 type="radio"
