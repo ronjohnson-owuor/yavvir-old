@@ -8,10 +8,24 @@ import { CiEdit } from "react-icons/ci";
 import { RiLockPasswordLine } from "react-icons/ri";
 import { BiShowAlt } from "react-icons/bi";
 import { LuEyeClosed } from "react-icons/lu";
+import axios from "axios";
+import useApi from "~/services/axios-service";
+import toast from "react-hot-toast";
+import { encryptToken } from "~/services/tokenManager";
+import Cookies from "js-cookie";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const secret = process.env.SECRET_KEY;
-  return Response.json({ googleAuthUrl: generateAuthUrl("register"), secret });
+  const uuidSecret = process.env.UUID_SECRET;
+  const uuidName = process.env.UUID_NAME;
+  const backendUrl = process.env.BACKEND_API_URL;
+  return Response.json({
+    googleAuthUrl: generateAuthUrl("register"),
+    secret,
+    backendUrl,
+    uuidSecret,
+    uuidName
+  });
 }
 
 interface dataInterface {
@@ -25,13 +39,14 @@ interface userdetails {
   email: string;
   password: string;
   phone: string;
-  picture:string;
-  type:number;
+  picture: string;
+  type: number;
 }
 
 function Teachersignup() {
   const [params] = useSearchParams();
-  const { googleAuthUrl, secret } = useLoaderData<typeof loader>();
+  const { googleAuthUrl, secret, backendUrl,uuidName,uuidSecret } = useLoaderData<typeof loader>();
+  const api = useApi(backendUrl);
   const [proceed, setProceed] = useState(false);
   const [data, setData] = useState<dataInterface>();
   const [username, setUsername] = useState("");
@@ -44,19 +59,26 @@ function Teachersignup() {
     email: "",
     password: "",
     phone: "",
-    picture:"",
-    type:0 //0 for student,1 for teachers and 2 for parents
+    picture: "",
+    type: 1, //1 for student,2 for teachers and 3 for parents
   });
   useEffect(() => {
     setPicture(data?.picture!);
     setUsername(data?.username!);
     setuserdetails((prev) => ({
       ...prev,
-      username:username|| prev.username,
-      email:data?.email||prev.email,
-      picture:data?.picture||prev.picture,
+      email: data?.email || prev.email,
+      picture: data?.picture || prev.picture,
     }));
   }, [data]);
+
+  useEffect(()=>{
+    setuserdetails((prev) => ({
+      ...prev,
+      username: username || prev.username,
+    }));
+  },[username]);
+
   // getting user data
   useEffect(() => {
     const encryptedData = params.get("data");
@@ -93,22 +115,46 @@ function Teachersignup() {
       // add a custom toast dialog
       return;
     }
-    setuserdetails(prev =>({
+    setuserdetails((prev) => ({
       ...prev,
-      phone:`+254${e.target.value}` || prev.password
+      phone: `+254${e.target.value}` || prev.password,
     }));
   };
 
-  const [checked,setChecked] = useState<null| number>(null);
-  const checkaccountType = (e:React.ChangeEvent<HTMLInputElement>) => {
+  const [checked, setChecked] = useState<null | number>(null);
+  const checkaccountType = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     let value = JSON.parse(e.target.value);
     setChecked(value);
-    setuserdetails(prev => ({
+    setuserdetails((prev) => ({
       ...prev,
-      type:value||prev.type
+      type: value || prev.type,
     }));
-  }
+  };
+
+  const handleUserGoogleSignup = async (userdetails: userdetails) => {
+    try {
+      const response = await api.post("google-user", userdetails);
+      if(response.data.proceed){
+        if(response.data.token){
+          const encrypttoken = encryptToken(response.data.token,uuidSecret);
+          if(encrypttoken.length !== 0){
+            Cookies.set(uuidName,encrypttoken);
+            toast.success(response.data.message);
+          }else{
+            toast.success("proceed to login please");
+          }
+        }
+      }else{
+        toast.error(response.data.message);
+      }
+      
+    } catch (err) {
+      // handle api request failure
+      console.log(err);
+      toast.error("There was an error...please try again later");
+    }
+  };
 
   return (
     <div className="w-full min-h-screen border grid grid-cols-1 place-content-center">
@@ -232,10 +278,12 @@ function Teachersignup() {
               </label>
               <div className="flex items-center">
                 <input
-                onChange={(e)=>setuserdetails(prev =>({
-                  ...prev,
-                  password:e.target.value || prev.password
-                }))}
+                  onChange={(e) =>
+                    setuserdetails((prev) => ({
+                      ...prev,
+                      password: e.target.value || prev.password,
+                    }))
+                  }
                   className="bg-transparent border w-full h-[40px] rounded-tl-md rounded-bl-md"
                   type={showpassword ? "text" : "password"}
                 />
@@ -270,13 +318,15 @@ function Teachersignup() {
             </div>
           </div>
           <div className="w-full md:flex flex-col md:items-center md:justify-center my-10 px-2 gap-2">
-            <h3 className="font-bold my-2 w-full text-center">what account are you creating?</h3>
+            <h3 className="font-bold my-2 w-full text-center">
+              what account are you creating?
+            </h3>
             <div className=" flex w-full items-center justify-center text-md my-2 ">
               <input
                 type="radio"
                 className="accent-main bg-white"
-                value={0}
-                checked={checked === 0}
+                value={1}
+                checked={checked === 1}
                 onChange={checkaccountType}
                 name="account_type"
               />
@@ -286,8 +336,8 @@ function Teachersignup() {
               <input
                 type="radio"
                 className="accent-main bg-white"
-                value={1}
-                checked={checked === 1}
+                value={2}
+                checked={checked === 2}
                 onChange={checkaccountType}
                 name="account_type"
               />
@@ -295,10 +345,10 @@ function Teachersignup() {
             </div>
             <div className=" flex w-full items-center justify-center text-md  my-2">
               <input
-              checked={checked === 2}
+                checked={checked === 3}
                 type="radio"
                 className="accent-main bg-white"
-                value={2}
+                value={3}
                 onChange={checkaccountType}
                 name="account_type"
               />
@@ -306,7 +356,10 @@ function Teachersignup() {
             </div>
           </div>
           <div className="w-full flex items-center justify-center">
-            <button onClick={()=> console.log(userdetails)}  className="bg-main h-[40px] rounded-md hover:text-white w-[300px] my-4">
+            <button
+              onClick={() => handleUserGoogleSignup(userdetails)}
+              className="bg-main h-[40px] rounded-md hover:text-white w-[300px] my-4"
+            >
               create account
             </button>
           </div>

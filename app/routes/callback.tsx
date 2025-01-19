@@ -26,7 +26,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
     // add data to the url
     const secret = process.env.SECRET_KEY || "";
-    console.log(secret);
     const cipherText = CryptoJS.AES.encrypt(
       JSON.stringify(data),
       secret
