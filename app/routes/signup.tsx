@@ -1,5 +1,11 @@
 import { LoaderFunctionArgs } from "@remix-run/node";
-import { data, Link, useLoaderData, useSearchParams } from "@remix-run/react";
+import {
+  data,
+  Link,
+  redirect,
+  useLoaderData,
+  useSearchParams,
+} from "@remix-run/react";
 import React, { HtmlHTMLAttributes, useEffect, useState } from "react";
 import { FaGoogle } from "react-icons/fa";
 import { generateAuthUrl } from "~/services/google";
@@ -24,7 +30,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     secret,
     backendUrl,
     uuidSecret,
-    uuidName
+    uuidName,
   });
 }
 
@@ -43,9 +49,18 @@ interface userdetails {
   type: number;
 }
 
+interface serverResponse {
+  message: string;
+  proceed: boolean;
+  url?: string;
+  token?: string;
+}
+
 function Teachersignup() {
   const [params] = useSearchParams();
-  const { googleAuthUrl, secret, backendUrl,uuidName,uuidSecret } = useLoaderData<typeof loader>();
+  const [code,setCode] = useState(0);
+  const { googleAuthUrl, secret, backendUrl, uuidName, uuidSecret } =
+    useLoaderData<typeof loader>();
   const api = useApi(backendUrl);
   const [proceed, setProceed] = useState(false);
   const [data, setData] = useState<dataInterface>();
@@ -72,12 +87,12 @@ function Teachersignup() {
     }));
   }, [data]);
 
-  useEffect(()=>{
+  useEffect(() => {
     setuserdetails((prev) => ({
       ...prev,
       username: username || prev.username,
     }));
-  },[username]);
+  }, [username]);
 
   // getting user data
   useEffect(() => {
@@ -134,21 +149,23 @@ function Teachersignup() {
 
   const handleUserGoogleSignup = async (userdetails: userdetails) => {
     try {
-      const response = await api.post("google-user", userdetails);
-      if(response.data.proceed){
-        if(response.data.token){
-          const encrypttoken = encryptToken(response.data.token,uuidSecret);
-          if(encrypttoken.length !== 0){
-            Cookies.set(uuidName,encrypttoken);
-            toast.success(response.data.message);
-          }else{
+      const response = (await api.post("", userdetails))
+        .data as serverResponse;
+      if (response.proceed) {
+        if (response.token) {
+          const encrypttoken = encryptToken(response.token, uuidSecret);
+          if (encrypttoken.length !== 0) {
+            Cookies.set(uuidName, encrypttoken);
+            toast.success(response.message);
+            // redirect user to respoective dashboard
+            if (response.url) window.location.href = response.url;
+          } else {
             toast.success("proceed to login please");
           }
         }
-      }else{
-        toast.error(response.data.message);
+      } else {
+        toast.error(response.message);
       }
-      
     } catch (err) {
       // handle api request failure
       console.log(err);
@@ -156,9 +173,36 @@ function Teachersignup() {
     }
   };
 
+  /* normal signin logic */
+  const [step, setStep] = useState(0);
+  const normalSignin = async () => {
+    const response = (await  api.post("generate-email-code",{email:userdetails.email})).data as serverResponse;
+    if(!response.proceed){
+      toast.error(response.message);
+      return;
+    }
+    toast.success(response.message);
+    setStep(1);
+  };
+
+  // verify the code sent
+  const verifyCode = async () => {
+    const response = (await api.post("verify-email-code",{email:userdetails.email,code})).data as serverResponse;
+    if(!response.proceed){
+      toast.error(response.message);
+      return;
+    }
+    if(response.proceed){
+      toast.success(response.message);
+      setStep(2);
+      setProceed(response.proceed);
+      return;
+    }
+  }
+
   return (
     <div className="w-full min-h-screen border grid grid-cols-1 place-content-center">
-      {!proceed && (
+      {!proceed && step == 0 && (
         <div className=" shadow-md rounded-md w-full xl:w-[60%] xl:mx-[20%] min-h-[400px] grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="h-full bg-main rounded-tl-md rounded-bl-md">
             {/* heading */}
@@ -196,6 +240,12 @@ function Teachersignup() {
                   full name
                 </label>
                 <input
+                  onChange={(e) =>
+                    setuserdetails((prev) => ({
+                      ...prev,
+                      username: e.target.value || prev.username,
+                    }))
+                  }
                   type="text"
                   id="user_name"
                   className="bg-transparent border border-gray-400 h-[45px] rounded-md"
@@ -206,22 +256,40 @@ function Teachersignup() {
                   email
                 </label>
                 <input
+                  onChange={(e) =>
+                    setuserdetails((prev) => ({
+                      ...prev,
+                      email: e.target.value || prev.email,
+                    }))
+                  }
                   type="email"
                   id="email"
                   className="bg-transparent border border-gray-400 h-[45px] rounded-md"
                 />
               </div>
-              <div className="flex flex-col my-2 w-[80%] md:w-full">
-                <label className="text-grey text-md my-2" htmlFor="phone">
-                  phone( eg +2547***)
+              <div className="flex items-center flex-col w-full">
+                <label className="flex items-center my-2" htmlFor="phone">
+                  <RiLockPasswordLine className="text-md" /> &nbsp;phone number
                 </label>
-                <input
-                  type="text"
-                  id="phone"
-                  className="bg-transparent border border-gray-400 h-[45px] rounded-md"
-                />
+                <div
+                  className={`w-full flex items-center ${
+                    wrongnumber ? "border-red-500 border-2" : "border"
+                  } rounded-md`}
+                >
+                  <div className="flex items-center">
+                    <p className="px-2">🇰🇪</p> <p>+254</p>
+                  </div>
+                  <input
+                    className="bg-transparent outline-none w-full h-[40px] rounded-md"
+                    type="text"
+                    onChange={checkNumber}
+                  />
+                </div>
               </div>
-              <button className="my-4 bg-main w-[80%] md:w-full h-[45px] rounded-md hover:text-white">
+              <button
+                onClick={normalSignin}
+                className="my-4 bg-main w-[80%] md:w-full h-[45px] rounded-md hover:text-white"
+              >
                 sign in
               </button>
 
@@ -249,7 +317,7 @@ function Teachersignup() {
       )}
 
       {/* next step of signup with google */}
-      {proceed && (
+      {proceed && step == 0 && (
         <div className=" md:w-[80%] w-full min-h-[600px] md:shadow-md rounded-md md:mx-[10%]">
           <div className="w-full py-4 flex items-center justify-center flex-col">
             <img src={picture} alt="user profile" className="rounded-md" />
@@ -362,6 +430,70 @@ function Teachersignup() {
             >
               create account
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* normal account login */}
+      {step == 1 && (
+        <div className="w-full h-screen grid place-content-center">
+          <h1 className="font-bold text-xl">verify your email</h1>
+          <p className="text-center">
+            we have sent a code to <span>ronjohnsonowuor83@gmail.com</span>{" "}
+          </p>
+          <div className="my-10 flex flex-col items-start">
+            <input
+            onChange={(e)=>setCode(Number(e.target.value))}
+              className="border border-gray-200 rounded-md bg-transparent font-bold w-[250px] h-[40px] text-center"
+              type="text"
+              placeholder="0000"
+            /> 
+
+            <button onClick={verifyCode}  className="w-[250px] p-2 h-[40px] bg-main text-white my-4 rounded">
+              verify
+            </button>
+            <div className="flex gap-4 items-center my-10">
+              <Link
+                className="font-extralight underline text-beige"
+                to="/signup"
+              >
+                back
+              </Link>
+              <button className="font-extralight underline text-beige">
+                resend email
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {proceed && step == 2 && (
+        <div className="w-full h-screen grid place-content-center">
+          <h1 className="font-bold text-xl">verify your email</h1>
+          <p className="text-center">
+            we have sent a code to <span>ronjohnsonowuor83@gmail.com</span>{" "}
+          </p>
+          <div className="my-10 flex flex-col items-start">
+            <input
+            onChange={(e)=>setCode(Number(e.target.value))}
+              className="border border-gray-200 rounded-md bg-transparent font-bold w-[250px] h-[40px] text-center"
+              type="text"
+              placeholder="0000"
+            /> 
+
+            <button onClick={verifyCode}  className="w-[250px] p-2 h-[40px] bg-main text-white my-4 rounded">
+              verify
+            </button>
+            <div className="flex gap-4 items-center my-10">
+              <Link
+                className="font-extralight underline text-beige"
+                to="/signup"
+              >
+                back
+              </Link>
+              <button className="font-extralight underline text-beige">
+                resend email
+              </button>
+            </div>
           </div>
         </div>
       )}
