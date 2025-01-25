@@ -1,20 +1,12 @@
 import { LoaderFunctionArgs } from "@remix-run/node";
-import {
-  data,
-  Link,
-  redirect,
-  useLoaderData,
-  useSearchParams,
-} from "@remix-run/react";
+import { Link, useLoaderData, useSearchParams } from "@remix-run/react";
 import React, { useEffect, useState } from "react";
 import { FaGoogle } from "react-icons/fa";
 import { generateAuthUrl } from "~/services/google";
 import CryptoJS from "crypto-js";
-import { CiEdit } from "react-icons/ci";
 import { RiLockPasswordLine } from "react-icons/ri";
 import { BiShowAlt } from "react-icons/bi";
 import { LuEyeClosed } from "react-icons/lu";
-import axios from "axios";
 import useApi from "~/services/axios-service";
 import toast from "react-hot-toast";
 import { encryptToken } from "~/services/tokenManager";
@@ -71,7 +63,7 @@ function Teachersignup() {
   const { googleAuthUrl, secret, backendUrl, uuidName, uuidSecret } =
     useLoaderData<typeof loader>();
   const api = useApi(backendUrl);
-  const [proceed, setProceed] = useState(false);
+  const [proceed, setProceed] = useState(true);
   const [data, setData] = useState<dataInterface>();
   const [username, setUsername] = useState("");
   const [picture, setPicture] = useState("");
@@ -124,7 +116,6 @@ function Teachersignup() {
     }
   }, [params]);
 
-  // check the number if its wrong
   const checkNumber = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     e.target.value = e.target.value.replace(/[^0-9]/g, "");
@@ -145,11 +136,8 @@ function Teachersignup() {
     }));
   };
 
-  const [checked, setChecked] = useState<null | number>(null);
-  const checkaccountType = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    let value = JSON.parse(e.target.value);
-    setChecked(value);
+  const checkaccountType = (value_string: string) => {
+    let value = Number(value_string);
     setuserdetails((prev) => ({
       ...prev,
       type: value || prev.type,
@@ -158,7 +146,8 @@ function Teachersignup() {
 
   const handleUserGoogleSignup = async (userdetails: userdetails) => {
     try {
-      const response = (await api.post("signup-user", userdetails)).data as serverResponse;
+      const response = (await api.post("signup-user", userdetails))
+        .data as serverResponse;
       if (response.proceed) {
         if (response.token) {
           const encrypttoken = encryptToken(response.token, uuidSecret);
@@ -175,8 +164,6 @@ function Teachersignup() {
         toast.error(response.message);
       }
     } catch (err) {
-      // handle api request failure
-      console.log(err);
       toast.error("There was an error...please try again later");
     }
   };
@@ -184,13 +171,13 @@ function Teachersignup() {
   /* normal signin logic */
   const [step, setStep] = useState(0);
   const normalSignin = async () => {
-    if(userdetails.username.trim().length == 0 ){
+    if (userdetails.username.trim().length == 0) {
       toast.error("username cannot be null");
-      return
+      return;
     }
-    if(userdetails.phone.trim().length == 0 ){
+    if (userdetails.phone.trim().length == 0) {
       toast.error("phone cannot be null");
-      return
+      return;
     }
     const response = (
       await api.post("generate-email-code", { email: userdetails.email })
@@ -248,8 +235,8 @@ function Teachersignup() {
             <div className="my-10 p-4 text-center md:text-start">
               <h3 className="font-bold text-[40px] md:text-[30px]">signup</h3>
               <p className="text-sm">
-                Have an account{" "}
-                <Link className="text-main underline" to="">
+                Have an account
+                <Link className="text-main underline" to="/login">
                   login
                 </Link>
               </p>
@@ -287,13 +274,15 @@ function Teachersignup() {
                   className="bg-transparent border border-gray-400 h-[45px] rounded-md"
                 />
               </div>
-              <div className="flex items-center flex-col w-full">
+              <div className="flex items-start flex-col w-[80%] xl:w-full ">
                 <label className="flex items-center my-2" htmlFor="phone">
                   <RiLockPasswordLine className="text-md" /> &nbsp;phone number
                 </label>
                 <div
                   className={`w-full flex items-center ${
-                    wrongnumber ? "border-red-500 border-2" : "border"
+                    wrongnumber
+                      ? "border-red-500 border-2"
+                      : "border border-gray-400"
                   } rounded-md`}
                 >
                   <div className="flex items-center">
@@ -342,18 +331,20 @@ function Teachersignup() {
           <div className="w-full py-4 flex items-center justify-center flex-col">
             <img src={picture} alt="user profile" className="rounded-md" />
             <h1 className="text-[30px] my-10 font-bold mb-2">{username}</h1>
-            <p className="mb-4 text-main">finish your account setup</p>
+            <p className="mb-4 text-main font-bold text-xl sm:text-[25px]">
+              finish your account setup
+            </p>
           </div>
-          <div className="grid grid-cols-1 xl:grid-cols-2 place-items-center w-full md:w-[70%] md:mx-[15%] p-2">
+          <div className="grid grid-cols-1 xl:grid-cols-2 place-items-center  w-[80%] mx-[10%] p-2">
             <input
               type="text"
-              className="bg-transparent w-full border text-center h-[40px] rounded-md"
+              className="bg-transparent border text-gray-300 text-sm w-full shadow-inner my-4 text-center h-[40px] rounded-md"
               disabled
               value={`email: ${data?.email}`}
             />
             <div className="flex items-center w-full my-2 xl:w-[80%] ">
               <input
-                className="bg-transparent w-full px-4 border text-center h-[40px] rounded-md"
+                className="bg-transparent border text-gray-300 text-sm w-full px-4 shadow-inner my-4 text-center h-[40px] rounded-md"
                 type="text"
                 disabled
                 value={"Username: " + data?.username}
@@ -362,7 +353,7 @@ function Teachersignup() {
             <div className=" my-4  w-full">
               <label className="flex items-center my-2" htmlFor="password">
                 <RiLockPasswordLine className="text-md" /> &nbsp;Enter your
-                password
+                password <span className="text-red-500 italic"> *</span>
               </label>
               <div className="flex items-center">
                 <input
@@ -387,7 +378,7 @@ function Teachersignup() {
             <div className="flex items-center flex-col w-full xl:w-[80%]">
               <label className="flex items-center my-2" htmlFor="phone">
                 <RiLockPasswordLine className="text-md" /> &nbsp;phone number
-                (EG: +2547***)
+                (EG: +2547***) <span className="text-red-500 italic"> *</span>
               </label>
               <div
                 className={`w-full flex items-center ${
@@ -409,38 +400,20 @@ function Teachersignup() {
             <h3 className="font-bold my-2 w-full text-center">
               what account are you creating?
             </h3>
-            <div className=" flex w-full items-center justify-center text-md my-2 ">
-              <input
-                type="radio"
-                className="accent-main bg-white"
-                value={1}
-                checked={checked === 1}
-                onChange={checkaccountType}
-                name="account_type"
-              />
-              <p>student account</p>{" "}
-            </div>
-            <div className=" flex w-full items-center justify-center text-md my-2">
-              <input
-                type="radio"
-                className="accent-main bg-white"
-                value={2}
-                checked={checked === 2}
-                onChange={checkaccountType}
-                name="account_type"
-              />
-              <p>teacher account</p>{" "}
-            </div>
-            <div className=" flex w-full items-center justify-center text-md  my-2">
-              <input
-                checked={checked === 3}
-                type="radio"
-                className="accent-main bg-white"
-                value={3}
-                onChange={checkaccountType}
-                name="account_type"
-              />
-              <p> parental account</p>
+            <div className="w-[80%] mx-[10%]">
+              <Select onValueChange={(value) => checkaccountType(value)}>
+                <SelectTrigger className="w-full my-4">
+                  <SelectValue placeholder="account type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>account type</SelectLabel>
+                    <SelectItem value={"1"}>student account</SelectItem>
+                    <SelectItem value={"2"}>teacher account</SelectItem>
+                    <SelectItem value={"3"}>parent account</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
             </div>
           </div>
           <div className="w-full flex items-center justify-center">
@@ -456,106 +429,135 @@ function Teachersignup() {
 
       {/* normal account login */}
       {step == 1 && (
-        <div className="w-full h-screen grid place-content-center">
-          <h1 className="font-bold text-xl">verify your email</h1>
-          <p className="text-center">
-            we have sent a code to <span>ronjohnsonowuor83@gmail.com</span>{" "}
-          </p>
-          <div className="my-10 flex flex-col items-start">
+        <div className="w-full p-4 bg-gradient-to-b from-beige_light to-beige h-screen flex items-center justify-start flex-col">
+          <h1 className="font-bold w-full text-center mb-4 text-[25px] mt-10 md:mt-0 ">
+            🔐 verify your email
+          </h1>
+          <center>
+            <p className="text-center text-sm">
+              we have sent a verification code to{" "}
+              <span className="text-main font-bold">
+                💌 ronjohnsonowuor83@gmail.com
+              </span>{" "}
+            </p>
+          </center>
+          <div className="my-10 flex flex-col items-center">
             <input
               onChange={(e) => setCode(Number(e.target.value))}
-              className="border border-gray-200 rounded-md bg-transparent font-bold w-[250px] h-[40px] text-center"
+              className="border w-full border-gray-500 rounded-md bg-transparent font-bold h-[40px] text-center text-[30px]"
               type="text"
               placeholder="0000"
             />
 
             <button
               onClick={verifyCode}
-              className="w-[250px] p-2 h-[40px] bg-main text-white my-4 rounded"
+              className=" w-full p-2 h-[40px] bg-main text-white my-4 rounded"
             >
               verify
             </button>
             <div className="flex gap-4 items-center my-10">
               <Link
-                className="font-extralight underline text-beige"
+                className="font-extralight underline text-black"
                 to="/signup"
               >
                 back
               </Link>
-              <button  className="font-extralight underline text-beige">
-                resend email
+              <button
+                onClick={normalSignin}
+                className="font-extralight underline text-black"
+              >
+                🔁resend email
               </button>
             </div>
           </div>
         </div>
       )}
       {step == 2 && (
-        <div className="w-full min-h-screen flex items-center justify-center flex-col p-4">
-          <h1 className="font-bold text-xl">signup</h1>
-          <p className="text-center">complete creating your account</p>
-          <div className="my-10 flex flex-col items-center">
-            <label htmlFor="name">full name</label>
+        <div className="w-full min-h-screen flex items-center justify-center flex-col p-4 bg-gradient-to-b from-beige_light to-beige">
+          <h1 className="font-bold text-[40px]">signup page</h1>
+          <p className="text-center text-sm">complete creating your account</p>
+          <div className="my-10 w-full xl:w-[40%] xl:mx-[30%] p-4 flex flex-col items-center">
+            <label className="w-[80%] mx-[10%] text-start" htmlFor="name">
+              full name
+            </label>
             <input
               id="name"
               disabled
               value={userdetails.username}
-              className="border border-gray-200 rounded-md bg-transparent font-bold  w-[300px] my-4 h-[40px]"
+              className=" bg-white p-2 text-black rounded-md bg-transparent font-bold  w-[80%] mx-[10%] my-4 h-[40px]"
               type="text"
             />
 
-            <label htmlFor="phone">phone number</label>
+            <label className="w-[80%] mx-[10%] text-start" htmlFor="phone">
+              phone number
+            </label>
             <input
               id="phone"
               disabled
               value={userdetails.phone}
-              className="border border-gray-200 rounded-md bg-transparent font-bold  w-[300px] my-4 h-[40px]"
+              className=" bg-white p-2 text-black rounded-md bg-transparent font-bold  w-[80%] mx-[10%] my-4 h-[40px]"
               type="text"
             />
-            <label htmlFor="email">email</label>
+            <label className="w-[80%] mx-[10%] text-start" htmlFor="email">
+              email
+            </label>
             <input
-            value={userdetails.email}
+              disabled
+              value={userdetails.email}
               id="email"
-              className="border border-gray-200 rounded-md bg-transparent font-bold  w-[300px] my-4 h-[40px]"
+              className=" bg-white p-2 text-black rounded-md bg-transparent font-bold  w-[80%] mx-[10%] my-4 h-[40px]"
               type="email"
             />
-            <label htmlFor="password">password</label>
+            <label className="w-[80%] mx-[10%] text-start" htmlFor="password">
+              password <span className="text-red-500 italic ">fill here *</span>
+            </label>
             <input
-            onChange={(e)=> setuserdetails(prev =>({
-              ...prev,
-              password:e.target.value || prev.password
-            }))}
+              onChange={(e) =>
+                setuserdetails((prev) => ({
+                  ...prev,
+                  password: e.target.value || prev.password,
+                }))
+              }
               id="password"
-              className="border border-gray-200 rounded-md bg-transparent font-bold  w-[300px] my-4 h-[40px]"
+              className=" bg-white p-2 text-black rounded-md bg-transparent font-bold  w-[80%] mx-[10%] my-4 h-[40px]"
               type="password"
             />
             {/* role teacher student etc*/}
             <div className="w-full my-4 flex items-center flex-col">
-              <p className="w-[50%]">choose the type of account you want to create eg teacher student or parent account</p>
-            <Select onValueChange={(value)=>setuserdetails(prev =>({
-              ...prev,
-              type: Number(value) || prev.type
-            }))}>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="account type" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectLabel>account type</SelectLabel>
-                  <SelectItem value={"1"}>student account</SelectItem>
-                  <SelectItem value={"2"}>teacher account</SelectItem>
-                  <SelectItem value={"3"}>parent account</SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
+              <p className="w-[80%] mx-[10%]">
+                choose the type of account you want to create eg teacher student
+                or parent account{" "}
+                <span className="text-red-500 italic ">fill here *</span>
+              </p>
+              <Select
+                onValueChange={(value) =>
+                  setuserdetails((prev) => ({
+                    ...prev,
+                    type: Number(value) || prev.type,
+                  }))
+                }
+              >
+                <SelectTrigger className="w-[80%] my-4">
+                  <SelectValue placeholder="account type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>account type</SelectLabel>
+                    <SelectItem value={"1"}>student account</SelectItem>
+                    <SelectItem value={"2"}>teacher account</SelectItem>
+                    <SelectItem value={"3"}>parent account</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
             </div>
-            <button onClick={()=> handleUserGoogleSignup(userdetails)}  className=" w-[300px] my-4 p-2 h-[40px] bg-main text-white my-4 rounded">
+            <button
+              onClick={() => handleUserGoogleSignup(userdetails)}
+              className=" w-[80%] mx-[10%] my-4 p-2 h-[40px] bg-main text-white my-4 rounded"
+            >
               signup
             </button>
             <div className="flex gap-4 items-center my-10">
-              <Link
-                className="font-extralight underline text-beige"
-                to="/"
-              >
+              <Link className="font-extralight underline text-beige" to="/">
                 terms and conditions
               </Link>
             </div>
