@@ -6,7 +6,7 @@ import {
   useLoaderData,
   useSearchParams,
 } from "@remix-run/react";
-import React, { HtmlHTMLAttributes, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaGoogle } from "react-icons/fa";
 import { generateAuthUrl } from "~/services/google";
 import CryptoJS from "crypto-js";
@@ -19,6 +19,15 @@ import useApi from "~/services/axios-service";
 import toast from "react-hot-toast";
 import { encryptToken } from "~/services/tokenManager";
 import Cookies from "js-cookie";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "~/components/ui/select";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const secret = process.env.SECRET_KEY;
@@ -58,7 +67,7 @@ interface serverResponse {
 
 function Teachersignup() {
   const [params] = useSearchParams();
-  const [code,setCode] = useState(0);
+  const [code, setCode] = useState(0);
   const { googleAuthUrl, secret, backendUrl, uuidName, uuidSecret } =
     useLoaderData<typeof loader>();
   const api = useApi(backendUrl);
@@ -127,7 +136,7 @@ function Teachersignup() {
       setTimeout(() => {
         setwrongnumber(false);
       }, 1000);
-      // add a custom toast dialog
+      toast.error("phone number is invalid");
       return;
     }
     setuserdetails((prev) => ({
@@ -149,8 +158,7 @@ function Teachersignup() {
 
   const handleUserGoogleSignup = async (userdetails: userdetails) => {
     try {
-      const response = (await api.post("", userdetails))
-        .data as serverResponse;
+      const response = (await api.post("signup-user", userdetails)).data as serverResponse;
       if (response.proceed) {
         if (response.token) {
           const encrypttoken = encryptToken(response.token, uuidSecret);
@@ -176,8 +184,18 @@ function Teachersignup() {
   /* normal signin logic */
   const [step, setStep] = useState(0);
   const normalSignin = async () => {
-    const response = (await  api.post("generate-email-code",{email:userdetails.email})).data as serverResponse;
-    if(!response.proceed){
+    if(userdetails.username.trim().length == 0 ){
+      toast.error("username cannot be null");
+      return
+    }
+    if(userdetails.phone.trim().length == 0 ){
+      toast.error("phone cannot be null");
+      return
+    }
+    const response = (
+      await api.post("generate-email-code", { email: userdetails.email })
+    ).data as serverResponse;
+    if (!response.proceed) {
       toast.error(response.message);
       return;
     }
@@ -187,18 +205,20 @@ function Teachersignup() {
 
   // verify the code sent
   const verifyCode = async () => {
-    const response = (await api.post("verify-email-code",{email:userdetails.email,code})).data as serverResponse;
-    if(!response.proceed){
+    const response = (
+      await api.post("verify-email-code", { email: userdetails.email, code })
+    ).data as serverResponse;
+    if (!response.proceed) {
       toast.error(response.message);
       return;
     }
-    if(response.proceed){
+    if (response.proceed) {
       toast.success(response.message);
       setStep(2);
       setProceed(response.proceed);
       return;
     }
-  }
+  };
 
   return (
     <div className="w-full min-h-screen border grid grid-cols-1 place-content-center">
@@ -443,13 +463,16 @@ function Teachersignup() {
           </p>
           <div className="my-10 flex flex-col items-start">
             <input
-            onChange={(e)=>setCode(Number(e.target.value))}
+              onChange={(e) => setCode(Number(e.target.value))}
               className="border border-gray-200 rounded-md bg-transparent font-bold w-[250px] h-[40px] text-center"
               type="text"
               placeholder="0000"
-            /> 
+            />
 
-            <button onClick={verifyCode}  className="w-[250px] p-2 h-[40px] bg-main text-white my-4 rounded">
+            <button
+              onClick={verifyCode}
+              className="w-[250px] p-2 h-[40px] bg-main text-white my-4 rounded"
+            >
               verify
             </button>
             <div className="flex gap-4 items-center my-10">
@@ -459,40 +482,82 @@ function Teachersignup() {
               >
                 back
               </Link>
-              <button className="font-extralight underline text-beige">
+              <button  className="font-extralight underline text-beige">
                 resend email
               </button>
             </div>
           </div>
         </div>
       )}
-      {proceed && step == 2 && (
-        <div className="w-full h-screen grid place-content-center">
-          <h1 className="font-bold text-xl">verify your email</h1>
-          <p className="text-center">
-            we have sent a code to <span>ronjohnsonowuor83@gmail.com</span>{" "}
-          </p>
-          <div className="my-10 flex flex-col items-start">
+      {step == 2 && (
+        <div className="w-full min-h-screen flex items-center justify-center flex-col p-4">
+          <h1 className="font-bold text-xl">signup</h1>
+          <p className="text-center">complete creating your account</p>
+          <div className="my-10 flex flex-col items-center">
+            <label htmlFor="name">full name</label>
             <input
-            onChange={(e)=>setCode(Number(e.target.value))}
-              className="border border-gray-200 rounded-md bg-transparent font-bold w-[250px] h-[40px] text-center"
+              id="name"
+              disabled
+              value={userdetails.username}
+              className="border border-gray-200 rounded-md bg-transparent font-bold  w-[300px] my-4 h-[40px]"
               type="text"
-              placeholder="0000"
-            /> 
+            />
 
-            <button onClick={verifyCode}  className="w-[250px] p-2 h-[40px] bg-main text-white my-4 rounded">
-              verify
+            <label htmlFor="phone">phone number</label>
+            <input
+              id="phone"
+              disabled
+              value={userdetails.phone}
+              className="border border-gray-200 rounded-md bg-transparent font-bold  w-[300px] my-4 h-[40px]"
+              type="text"
+            />
+            <label htmlFor="email">email</label>
+            <input
+            value={userdetails.email}
+              id="email"
+              className="border border-gray-200 rounded-md bg-transparent font-bold  w-[300px] my-4 h-[40px]"
+              type="email"
+            />
+            <label htmlFor="password">password</label>
+            <input
+            onChange={(e)=> setuserdetails(prev =>({
+              ...prev,
+              password:e.target.value || prev.password
+            }))}
+              id="password"
+              className="border border-gray-200 rounded-md bg-transparent font-bold  w-[300px] my-4 h-[40px]"
+              type="password"
+            />
+            {/* role teacher student etc*/}
+            <div className="w-full my-4 flex items-center flex-col">
+              <p className="w-[50%]">choose the type of account you want to create eg teacher student or parent account</p>
+            <Select onValueChange={(value)=>setuserdetails(prev =>({
+              ...prev,
+              type: Number(value) || prev.type
+            }))}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="account type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>account type</SelectLabel>
+                  <SelectItem value={"1"}>student account</SelectItem>
+                  <SelectItem value={"2"}>teacher account</SelectItem>
+                  <SelectItem value={"3"}>parent account</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+            </div>
+            <button onClick={()=> handleUserGoogleSignup(userdetails)}  className=" w-[300px] my-4 p-2 h-[40px] bg-main text-white my-4 rounded">
+              signup
             </button>
             <div className="flex gap-4 items-center my-10">
               <Link
                 className="font-extralight underline text-beige"
-                to="/signup"
+                to="/"
               >
-                back
+                terms and conditions
               </Link>
-              <button className="font-extralight underline text-beige">
-                resend email
-              </button>
             </div>
           </div>
         </div>
