@@ -18,13 +18,16 @@ export async function loader({ request: _ }: LoaderFunctionArgs) {
 }
 function Teacherdashboard() {
   return (
-    <div>
+    <div className="w-full">
       <Navigation />
-      <div className="w-full px-4 my-4 min-h-[300px] grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-        <Profile />
-        <Finance />
+      <div className="w-full sm:px-4 my-4 min-h-[300px] sm:gap-4">
+        <div className="w-full px-4 my-4 min-h-[300px] grid grid-cols-1 md:grid-cols-2 gap-4">
+          <Profile />
+          <Finance />
+          <Lessons />
+        </div>
+        {/* full page components */}
         <Additionalprofile />
-        <Lessons />
       </div>
     </div>
   );

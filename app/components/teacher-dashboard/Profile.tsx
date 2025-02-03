@@ -68,7 +68,7 @@ function Profile() {
     return;
   };
   return (
-    <div className=" shadow-sm p-2 rounded-sm sm:rounded-none w-full min-h-[300px]">
+    <div className=" shadow-sm p-2 rounded-sm sm:rounded-none w-full min-h-f[300px]">
       {loading && (
         <div className="w-full h-full flex items-center justify-center">
           <span className="loading loading-spinner text-main"></span>
@@ -98,9 +98,9 @@ function Profile() {
               </div>
             )}
             <div>
-              <h3 className="font-bold"> hello,{basic_userdata?.username}</h3>
+              <h3 className="font-bold text-center sm:text-left"> hello,{basic_userdata?.username}</h3>
               <p className="text-beige text-[12px]">{basic_userdata?.email}</p>
-              <p className="text-beige text-[12px]">{basic_userdata?.phone}</p>
+              <p className="text-beige text-center sm:text-left text-[12px]">{basic_userdata?.phone}</p>
             </div>
           </div>
           <div className=" p-4 my-2 grid grid-cols-2 gap-2">
@@ -119,7 +119,7 @@ function Profile() {
             <div className="flex flex-col items-center gap-2 ">
               <PiStudentThin className="rounded-[100vh] text-beige bg-beige_light p-2 w-[80px] h-[80px] text-[20px]" />
               <h1 className="font-bold">50</h1>
-              <p>student(s) enrolled</p>
+              <p>student(s)</p>
             </div>
           </div>
           <div className="p-4 my-2 flex items-center justify-center">

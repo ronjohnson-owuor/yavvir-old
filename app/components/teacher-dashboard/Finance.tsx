@@ -23,14 +23,15 @@ function Finance() {
             <p>120K</p>
             <span>total widthdrawn</span>
           </div>
-          <button className="btn w-[80%] mx-[10%]  hover:bg-main border-none  hover:text-white">
+          <button className="btn  w-full sm:w-[80%] mx-[10%]  hover:bg-main border-none  hover:text-white">
             request withdrawal
           </button>
-          <div className="my-4 ">
-            <h3 className="my-2">withdrawal history</h3>
-            <div className="grid grid-cols-3 gap-4">
-              <button className="bg-beige_light flex items-center gap-2 rounded-[20px] px-4 py-2"><PiHandWithdrawLight />success</button>
-              <button className="bg-beige_light flex items-center gap-2 rounded-[20px] px-4 py-2"> <GiBackwardTime />pending</button> <button className="bg-beige_light flex items-center gap-2 rounded-[20px] px-4 py-2"><GiPayMoney /> failed</button>
+          <div className="my-4 w-full ">
+            <h3 className="my-2 sm:text-center my-4">withdrawal history</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full">
+              <button className="bg-beige_light flex items-center gap-2 rounded-[20px] px-4 py-2 w-full  flex items-center justify-center"><PiHandWithdrawLight />success</button>
+              <button className="bg-beige_light flex items-center gap-2 rounded-[20px] px-4 py-2 w-full  flex items-center justify-center"> <GiBackwardTime />pending</button>
+               <button className="bg-beige_light flex items-center gap-2 rounded-[20px] px-4 py-2 w-full  flex items-center justify-center"><GiPayMoney /> failed</button>
             </div>
           </div>
         </div>
