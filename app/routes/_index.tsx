@@ -19,7 +19,6 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-
 export async function loader({ request }: LoaderFunctionArgs) {
   const uuidSecret = process.env.UUID_SECRET;
   const uuidName = process.env.UUID_NAME;
@@ -44,13 +43,17 @@ export default function Index() {
     if (cookieValue) {
       let decrypted = decryptToken(cookieValue, uuidSecret);
       // get more details about this user
-      const response:userdata = (await api.get('get-user-data',{
-        headers:{
-          Authorization:`Bearer ${decrypted}`
-        }
-      })).data;
-      if(response.proceed){
+      const response: userdata = (
+        await api.get("get-user-data", {
+          headers: {
+            Authorization: `Bearer ${decrypted}`,
+          },
+        })
+      ).data;
+      if (response.proceed) {
         window.location.href = `${response.user?.role}-dashboard`;
+        setloading(false);
+      } else {
         setloading(false);
       }
       return;
@@ -58,6 +61,7 @@ export default function Index() {
     setTimeout(() => {
       setloading(false);
     }, 3000);
+
     return;
   };
 
