@@ -28,9 +28,9 @@ function Homenav() {
         </Link>
       </ul>
       <div className="flex gap-2  md:gap-4 ml-4 ">
-        <button id="nav_buttons"  className="bg-beige_light text-sm sm:text-md w-[60px]  md:w-[80px] shadow-sm rounded-md h-[35px]">
+      <Link to="/login"> <button id="nav_buttons"  className="bg-beige_light text-sm sm:text-md w-[60px]  md:w-[80px] shadow-sm rounded-md h-[35px]">
           login
-        </button>
+        </button></Link>
         
           <Link to="/signup"><button id="nav_buttons"  className="bg-main text-sm sm:text-md w-[60px]  md:w-[80px] rounded-md h-[35px] shadow-sm hover:text-white transition-all">signup</button></Link>
         
