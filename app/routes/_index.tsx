@@ -62,7 +62,7 @@ export default function Index() {
   };
 
   return (
-    <div className="">
+    <div>
       {loading && <Loader />}
       {!loading && <Home />}
     </div>

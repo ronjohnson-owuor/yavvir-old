@@ -8,19 +8,45 @@ import { PiStudentBold, PiStudentThin } from "react-icons/pi";
 import useApi from "~/services/axios-service";
 import { envBackendData, user, userdata } from "~/services/interfaces";
 import { decryptToken } from "~/services/tokenManager";
+import Uploadprofile from "./Uploadprofile";
+import { loader } from "~/routes/teacher-dashboard";
 
-function Profile({ backendUrl, uuidName, uuidSecret }: envBackendData) {
+function Profile() {
+  const { backendUrl, uuidName, uuidSecret } = useLoaderData<typeof loader>();
   const [loading, setloading] = useState(true);
   const [basic_userdata, setbasic_userdata] = useState<user>();
+  const [isEditingprofile, setisEditingprofile] = useState(false);
+  const [profilescore, setprofilescore] = useState(10);
   const api = useApi(backendUrl);
   useEffect(() => {
     validateUser();
+    getProfileCompleteness();
   }, []);
+
+  const getProfileCompleteness = async () =>{
+    let cookieValue = Cookies.get(uuidName);
+    if (cookieValue) {
+      const decrypted = decryptToken(cookieValue, uuidSecret);
+      console.log(decrypted);
+      const response = (
+        await api.post("teacher-api/profile-completeness",null, {
+          headers: {
+            Authorization: `Bearer ${decrypted}`,
+          },
+        })
+      ).data;
+      if(response.proceed){
+        setprofilescore(response.score);
+        return;
+      }
+  }
+}
 
   const validateUser = async () => {
     let cookieValue = Cookies.get(uuidName);
     if (cookieValue) {
       let decrypted = decryptToken(cookieValue, uuidSecret);
+
       // get more details about this user
       const response: userdata = (
         await api.get("get-user-data", {
@@ -66,7 +92,7 @@ function Profile({ backendUrl, uuidName, uuidSecret }: envBackendData) {
             )}
             {basic_userdata?.picture && (
               <div className="avatar">
-                <div className="w-30 rounded-full border-4 border-beige">
+                <div className="w-20 h-20 rounded-full border-4 border-beige">
                   <img src={basic_userdata.picture} />
                 </div>
               </div>
@@ -82,34 +108,39 @@ function Profile({ backendUrl, uuidName, uuidSecret }: envBackendData) {
               <div
                 className="radial-progress text-beige bg-beige_light"
                 // @ts-ignore
-                style={{ "--value": 10 }}
+                style={{ "--value": profilescore }}
                 role="progressbar"
               >
-                10%
+                {profilescore}%
               </div>
-              <h1 className="font-bold">10%</h1>
-              <p className="text-sm">profile completeness</p>
+              <h1 className="font-bold">{profilescore}%</h1>
+              <p className="text-sm">{profilescore == 100 ? "profile completed":"complete profile"}</p>
             </div>
             <div className="flex flex-col items-center gap-2 ">
-            <PiStudentThin  className="rounded-[100vh] text-beige bg-beige_light p-2 w-[80px] h-[80px] text-[20px]" />
+              <PiStudentThin className="rounded-[100vh] text-beige bg-beige_light p-2 w-[80px] h-[80px] text-[20px]" />
               <h1 className="font-bold">50</h1>
               <p>student(s) enrolled</p>
             </div>
           </div>
           <div className="p-4 my-2 flex items-center justify-center">
             {!basic_userdata?.picture && (
-              <button className="btn bg-transparent border-beige mr-2 text-black text-sm hover:bg-beige">
+              <button
+                onClick={() => setisEditingprofile(true)}
+                className="btn bg-transparent border-beige mr-2 w-full text-black text-sm hover:bg-beige"
+              >
                 <IoCameraOutline /> add profile photo
               </button>
             )}
-            <button className="btn bg-transparent border-beige text-black text-sm hover:bg-beige">
-              <LiaUserEditSolid /> edit profile
-            </button>
           </div>
         </div>
       )}
+      {isEditingprofile && <Uploadprofile close={setisEditingprofile} />}
     </div>
   );
 }
 
 export default Profile;
+  function validateUser() {
+    throw new Error("Function not implemented.");
+  }
+
