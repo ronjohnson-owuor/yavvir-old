@@ -76,7 +76,7 @@ function login() {
   }}
 >
 
-      <div className=" p-4 h-full rounded-sm w-[40%]">
+      <div className=" p-4 h-full rounded-sm w-full md:w-[80%] xl:w-[40%]">
         <center><img src={logo} alt=" logo" className="w-[150px] h-[150px] rounded-full object-cover" /></center>
         <h1 className="font-bold my-2 text-[30px] text-center">welcome back</h1>
         <p className="text-center">
