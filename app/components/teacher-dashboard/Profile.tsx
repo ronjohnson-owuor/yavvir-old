@@ -27,7 +27,6 @@ function Profile() {
     let cookieValue = Cookies.get(uuidName);
     if (cookieValue) {
       const decrypted = decryptToken(cookieValue, uuidSecret);
-      console.log(decrypted);
       const response = (
         await api.post("teacher-api/profile-completeness",null, {
           headers: {
