@@ -52,7 +52,7 @@ function Teachersignup() {
   const [picture, setPicture] = useState("");
   const [wrongnumber, setwrongnumber] = useState(false);
   const [showpassword, setshowpassword] = useState(false);
-  const [isdisabled,setisdisabled] = useState(true);
+  const [isdisabled,setisdisabled] = useState(false);
 
   const [userdetails, setuserdetails] = useState<userdetails>({
     username: "",
