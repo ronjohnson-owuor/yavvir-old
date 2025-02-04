@@ -52,7 +52,7 @@ function Teachersignup() {
   const [picture, setPicture] = useState("");
   const [wrongnumber, setwrongnumber] = useState(false);
   const [showpassword, setshowpassword] = useState(false);
-  const [isdisabled,setisdisabled] = useState(false);
+  const [isdisabled,setisdisabled] = useState(true);
 
   const [userdetails, setuserdetails] = useState<userdetails>({
     username: "",
@@ -134,9 +134,9 @@ function Teachersignup() {
       return;
     }
     try {
+      setisdisabled(true);
       const response = (await api.post("signup-user", userdetails))
         .data as serverResponse;
-        setisdisabled(true);
       if (response.proceed) {
         if (response.token) {
           const encrypttoken = encryptToken(response.token, uuidSecret);
@@ -322,7 +322,7 @@ function Teachersignup() {
 
       {/* next step of signup with google */}
       {proceed && step == 0 && (
-        <div className=" md:w-[80%] w-full min-h-[600px] md:shadow-md rounded-md md:mx-[10%]">
+        <div className=" md:w-[80%] bg-white w-full min-h-[600px] md:shadow-md rounded-md md:mx-[10%]">
           <div className="w-full py-4 flex items-center justify-center flex-col">
             <img src={picture} alt="user profile" className="rounded-md" />
             <h1 className="text-[30px] my-10 font-bold mb-2">{username}</h1>
@@ -417,7 +417,7 @@ function Teachersignup() {
               onClick={() => handleUserSignup(userdetails)}
               className="bg-main h-[40px] rounded-md hover:text-white w-[300px] my-4 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              create account
+             {isdisabled ? <div className="text-sm flex items-center justify-center gap-2"><span className="loading loading-spinner loading-xs"></span> <span>creating account ...</span></div> :"create account"}
             </button>
           </div>
         </div>
