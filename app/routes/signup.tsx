@@ -46,7 +46,7 @@ function Teachersignup() {
   const { googleAuthUrl, secret, backendUrl, uuidName, uuidSecret } =
     useLoaderData<typeof loader>();
   const api = useApi(backendUrl);
-  const [proceed, setProceed] = useState(true);
+  const [proceed, setProceed] = useState(false);
   const [data, setData] = useState<dataInterface>();
   const [username, setUsername] = useState("");
   const [picture, setPicture] = useState("");
