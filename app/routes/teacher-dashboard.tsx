@@ -20,13 +20,10 @@ function Teacherdashboard() {
   return (
     <div className="w-full">
       <Navigation />
-      <div className="w-full sm:px-4 my-4 min-h-[300px] sm:gap-4">
-        <div className="w-full px-4 my-4 min-h-[300px] grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Profile />
-          <Finance />
-          <Lessons />
-        </div>
-        {/* full page components */}
+      <div className="w-full px-4 my-4 min-h-[300px] grid grid-cols-1 md:grid-cols-2 gap-4">
+        <Profile />
+        <Finance />
+        <Lessons />
         <Additionalprofile />
       </div>
     </div>

@@ -1,34 +1,28 @@
 import React from 'react'
+import Lessonlist from './Lessonlist'
 
 function Lessons() {
   return (
-    <div className='shadow-md p-4 rounded-sm sm:rounded-none w-full min-h-[300px]'>
-        <h1 className='font-bold my-4'>My Lessons</h1>
-        <div className='flex flex-col my-10'>
-            {/* lessons pending */}
-            <div className='flex items-start justify-between my-1 shadow-lg rounded-md p-4'>
-                <h3>Introduction....</h3>
-                <span>19:00 PM</span>
-                <p className='bg-main text-white text-sm p-1 px-2 rounded-[20px]'>pending</p>
+    <div className='w-full shadow-sm'>
+       <Lessonlist/>
+       <div className='p-4  mt-10'>
+        <h1 className='font-bold'>my Statistics</h1>
+        <div className='grid grid-cols-3 gap-4 my-4'>
+            <div className='flex items-center justify-center p-4 shadow-sm rounded-lg flex-col'>
+                <span className='text-[30px] font-bold'>200+</span>
+                <h1>total lessons</h1>
             </div>
-            <div className='flex items-start justify-between my-1 shadow-lg rounded-md p-4'>
-                <h3>Introduction....</h3>
-                <span>19:00 PM</span>
-                <p className='bg-main text-white text-sm p-1 px-2 rounded-[20px]'>pending</p>
+            <div className='flex items-center justify-center p-4 shadow-sm rounded-lg flex-col'>
+                <span className='text-[30px] font-bold'>5</span>
+                <h1>pending lessons</h1>
             </div>
-            <div className='flex items-start justify-between my-1 shadow-lg rounded-md p-4'>
-                <h3>Introduction....</h3>
-                <span>19:00 PM</span>
-                <p className='bg-main text-white text-sm p-1 px-2 rounded-[20px]'>pending</p>
+            <div className='flex items-center justify-center p-4 shadow-sm rounded-lg flex-col'>
+                <span className='text-[30px] font-bold'>195+</span>
+                <h1>closed lessons</h1>
             </div>
-
-            <span className='underline my-2 text-sm'>view all</span>
         </div>
-
-        <div className='flex items-center justify-between p-2'>
-            <button className='btn bg-gray-600 border-none hover:bg-main'>create lesson</button>
-            <button className='btn bg-gray-600 border-none hover:bg-main'>edit lessons</button>
-        </div>
+        <button className='btn w-full bg-main text-white border-none'>create lesson</button>
+       </div>
 
     </div>
   )
