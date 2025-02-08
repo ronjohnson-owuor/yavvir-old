@@ -229,7 +229,7 @@ function Additionalprofile() {
               <div>
                 <IoCheckmarkDoneCircle
                   className={`text-[20px] ${
-                    teacher_data?.school ? "text-main" : "text-red-500"
+                    teacher_data?.extra_info ? "text-main" : "text-red-500"
                   }`}
                 />
               </div>
@@ -254,7 +254,7 @@ function Additionalprofile() {
               <div>
                 <IoCheckmarkDoneCircle
                   className={`text-[20px] ${
-                    teacher_data?.school ? "text-main" : "text-red-500"
+                    teacher_data?.certificates ? "text-main" : "text-red-500"
                   }`}
                 />
               </div>

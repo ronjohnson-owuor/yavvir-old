@@ -97,3 +97,24 @@ export interface lessonPayload {
   start_time: string|null,
   lesson_price: number|null,
 }
+
+export interface reffInterface {
+  proceed:boolean,
+  reff?:string
+}
+
+export  interface lessonData {
+  proceed: boolean,
+  isPremium:boolean,
+  lesson: {
+      total: number,
+      expired:number,
+      pending: number
+  }
+}
+
+export  interface paymentUrl {
+  proceed: boolean,
+  message:string,
+  url?:string
+}

@@ -96,7 +96,7 @@ function EditLesson({ setEditLesson, id }: lessonModerators) {
   };
 
   return (
-    <div className="p-4 w-[80%] mx-[10%] h-screen bg-white overflow-y-scroll">
+    <div className="p-4 w-full md:w-[80%] md:mx-[10%] h-screen bg-white overflow-y-scroll">
       <div className="flex items-center justify-between">
         <h1 className="font-bold text-[25px]">Edit lesson</h1>
         <IoClose
