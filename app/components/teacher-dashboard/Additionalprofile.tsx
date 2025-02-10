@@ -96,7 +96,7 @@ function Additionalprofile() {
   };
 
   return (
-    <div className="shadow-md">
+    <div className="shadow-sm">
       {teacher_data && user_details && !isEditing && (
         <div className=" shadow-sm rounded-sm sm:rounded-none w-full min-h-[300px]">
           <div className="w-[95%] flex items-center justify-between p-2 my-2 rounded-md">
@@ -124,7 +124,6 @@ function Additionalprofile() {
             </div>
           )}
           <div className="w-full p-2 min-h-[200px] my-4 grid grid-cols-1 gap-10">
-
             <div className="flex items-center justify-between  p-2 px-4 rounded-md shadow-sm min-h-[50px]">
               <div>
                 <p className="flex items-center text-sm flex-row gap-2 font-bold  text-black  ">
@@ -136,7 +135,11 @@ function Additionalprofile() {
                 </span>
               </div>
               <div>
-              <IoCheckmarkDoneCircle className={`text-[20px] ${user_details?.username ?'text-main':'text-red-500'}`} />
+                <IoCheckmarkDoneCircle
+                  className={`text-[20px] ${
+                    user_details?.username ? "text-main" : "text-red-500"
+                  }`}
+                />
               </div>
             </div>
 
@@ -147,11 +150,15 @@ function Additionalprofile() {
                   subjects you teach
                 </p>
                 <span className="text-grey text-sm p-2 my-2">
-                  {trim(teacher_data?.subject??"no information specified")}
+                  {trim(teacher_data?.subject ?? "no information specified")}
                 </span>
               </div>
               <div>
-              <IoCheckmarkDoneCircle className={`text-[20px] ${teacher_data?.subject ?'text-main':'text-red-500'}`} />
+                <IoCheckmarkDoneCircle
+                  className={`text-[20px] ${
+                    teacher_data?.subject ? "text-main" : "text-red-500"
+                  }`}
+                />
               </div>
             </div>
             <div className="flex items-center justify-between  p-2 px-4 rounded-md shadow-sm min-h-[50px]">
@@ -161,11 +168,15 @@ function Additionalprofile() {
                   Enter your current location
                 </p>
                 <span className="text-grey text-sm p-2 my-2">
-                  {trim(teacher_data?.location??"no information specified")}
+                  {trim(teacher_data?.location ?? "no information specified")}
                 </span>
               </div>
               <div>
-              <IoCheckmarkDoneCircle className={`text-[20px] ${teacher_data?.location ?'text-main':'text-red-500'}`} />
+                <IoCheckmarkDoneCircle
+                  className={`text-[20px] ${
+                    teacher_data?.location ? "text-main" : "text-red-500"
+                  }`}
+                />
               </div>
             </div>
             <div className="flex items-center justify-between  p-2 px-4 rounded-md shadow-sm min-h-[50px]">
@@ -175,11 +186,15 @@ function Additionalprofile() {
                   More about you
                 </p>
                 <span className="text-grey text-sm p-2 my-2">
-                  {trim(teacher_data?.bio??"no information specified")}
+                  {trim(teacher_data?.bio ?? "no information specified")}
                 </span>
               </div>
               <div>
-              <IoCheckmarkDoneCircle className={`text-[20px] ${teacher_data?.bio ?'text-main':'text-red-500'}`} />
+                <IoCheckmarkDoneCircle
+                  className={`text-[20px] ${
+                    teacher_data?.bio ? "text-main" : "text-red-500"
+                  }`}
+                />
               </div>
             </div>
             <div className="flex items-center justify-between  p-2 px-4 rounded-md shadow-sm min-h-[50px]">
@@ -189,11 +204,15 @@ function Additionalprofile() {
                   where do you teach at the moment
                 </p>
                 <span className="text-grey text-sm p-2 my-2">
-                  {trim(teacher_data?.school??"no information specified")}
+                  {trim(teacher_data?.school ?? "no information specified")}
                 </span>
               </div>
               <div>
-              <IoCheckmarkDoneCircle className={`text-[20px] ${teacher_data?.school ?'text-main':'text-red-500'}`} />
+                <IoCheckmarkDoneCircle
+                  className={`text-[20px] ${
+                    teacher_data?.school ? "text-main" : "text-red-500"
+                  }`}
+                />
               </div>
             </div>
 
@@ -201,14 +220,18 @@ function Additionalprofile() {
               <div>
                 <p className="flex items-center text-sm flex-row gap-2 font-bold  text-black  ">
                   <FaBriefcase />
-                   extra info to help students locate your profile
+                  extra info to help students locate your profile
                 </p>
                 <span className="text-grey text-sm p-2 my-2">
-                  {trim(teacher_data?.extra_info??"no information specified")}
+                  {trim(teacher_data?.extra_info ?? "no information specified")}
                 </span>
               </div>
               <div>
-              <IoCheckmarkDoneCircle className={`text-[20px] ${teacher_data?.school ?'text-main':'text-red-500'}`} />
+                <IoCheckmarkDoneCircle
+                  className={`text-[20px] ${
+                    teacher_data?.extra_info ? "text-main" : "text-red-500"
+                  }`}
+                />
               </div>
             </div>
 
@@ -219,14 +242,23 @@ function Additionalprofile() {
                   Your certificates
                 </p>
                 <span className="text-grey text-sm p-2 my-2">
-                  {teacher_data?.certificates ? <p className="link">{teacher_data.certificates} certificates  found</p>:trim("no information specified")}
+                  {teacher_data?.certificates ? (
+                    <p className="link">
+                      {teacher_data.certificates} certificates found
+                    </p>
+                  ) : (
+                    trim("no information specified")
+                  )}
                 </span>
               </div>
               <div>
-              <IoCheckmarkDoneCircle className={`text-[20px] ${teacher_data?.school ?'text-main':'text-red-500'}`} />
+                <IoCheckmarkDoneCircle
+                  className={`text-[20px] ${
+                    teacher_data?.certificates ? "text-main" : "text-red-500"
+                  }`}
+                />
               </div>
             </div>
-            
           </div>
           <hr />
           {profilescore != 100 && (
@@ -355,12 +387,12 @@ function Additionalprofile() {
 
             <button
               onClick={handleProfileEdit}
-              className="w-full h-[40px] bg-main rounded-md hover:text-white"
+              className="w-[96%] h-[40px] bg-main rounded-md hover:text-white mx-4"
             >
               {" "}
               save changes
             </button>
-            <div className="my-4 mt-10">
+            <div className="my-4 mt-10 px-4">
               <p>additional settings</p>
               <button
                 onClick={() => setuploadingdocuments(true)}

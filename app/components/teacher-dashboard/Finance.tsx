@@ -6,7 +6,7 @@ import { PiHandWithdrawLight } from "react-icons/pi";
 function Finance() {
   const [loading, setloading] = useState(false);
   return (
-    <div className="shadow-md rounded-sm sm:rounded-none w-full min-h-[300px] p-4">
+    <div className="shadow-sm rounded-sm sm:rounded-none w-full min-h-[300px] p-4">
       {loading && (
         <div className="w-full h-full flex items-center justify-center">
           <span className="loading loading-spinner text-main"></span>

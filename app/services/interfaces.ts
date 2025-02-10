@@ -36,8 +36,8 @@ export interface teacherDataRaw {
   basic_data: user;
 }
 
-export interface modalInterface{
-  close:Function
+export interface modalInterface {
+  close: Function;
 }
 
 export interface serverResponse {
@@ -52,7 +52,6 @@ export interface userdata_login {
   password: string;
 }
 
-
 export interface dataInterface {
   email: string;
   picture: string;
@@ -65,5 +64,58 @@ export interface userdetails {
   password: string;
   phone: string;
   picture: string;
-  type: number|null;
+  type: number | null;
+}
+
+export interface lessonList {
+  message: string;
+  proceed: boolean;
+  lessons: lessons[];
+}
+
+export interface lessons {
+  creator: number;
+  duration: number;
+  expired: boolean;
+  id: number;
+  lesson_name: string;
+  lesson_uuid: string;
+  start_time: string;
+  inprogress:boolean;
+}
+
+export  interface lessonModerators {
+  createlesson?:boolean,
+  setcreatelesson?:Function,
+  setEditLesson?:Function,
+  id?:number
+} 
+
+export interface lessonPayload {
+  id:number,
+  lesson_name:string|null,
+  duration: number|null,
+  start_time: string|null,
+  lesson_price: number|null,
+}
+
+export interface reffInterface {
+  proceed:boolean,
+  reff?:string
+}
+
+export  interface lessonData {
+  proceed: boolean,
+  isPremium:boolean,
+  lesson: {
+      total: number,
+      expired:number,
+      pending: number
+  }
+}
+
+export  interface paymentUrl {
+  proceed: boolean,
+  message:string,
+  url?:string
 }
