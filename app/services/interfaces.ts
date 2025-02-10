@@ -81,6 +81,7 @@ export interface lessons {
   lesson_name: string;
   lesson_uuid: string;
   start_time: string;
+  inprogress:boolean;
 }
 
 export  interface lessonModerators {

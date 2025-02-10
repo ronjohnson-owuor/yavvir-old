@@ -44,7 +44,6 @@ function Uploadprofile({ close }: modalInterface) {
         }
       } catch (error) {
         toast.error("there was an error");
-        console.log(error);
       }
     };
   

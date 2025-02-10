@@ -13,6 +13,7 @@ function EditLesson({ setEditLesson, id }: lessonModerators) {
   const api = useApi(backendUrl);
 
   const [selected, setSelected] = useState<number>();
+   const [ispremium, setispremium] = useState<boolean>(false);
   const [fees, setFees] = useState({
     teacher_cost: 0,
     commission: 0,
@@ -51,6 +52,23 @@ function EditLesson({ setEditLesson, id }: lessonModerators) {
     }
   };
 
+  const getPremium = async () => {
+    let cookieValue = Cookies.get(uuidName);
+    if (cookieValue) {
+      const decrypted = decryptToken(cookieValue, uuidSecret);
+      const response = (
+        await api.get("teacher-api/is-premium", {
+          headers: {
+            Authorization: `Bearer ${decrypted}`,
+          },
+        })
+      ).data;
+
+      setispremium(response.premium);
+      return;
+    }
+  };
+
   const calculateFees = () => {
     setFees((prev) => {
       setLesson((prev_less) => ({
@@ -66,6 +84,7 @@ function EditLesson({ setEditLesson, id }: lessonModerators) {
 
   useEffect(() => {
     calculateFees();
+    getPremium();
   }, [selected]);
 
   const handleCreateLesson = async () => {
@@ -73,7 +92,6 @@ function EditLesson({ setEditLesson, id }: lessonModerators) {
       toast.error("no lesson selected");
       return;
     }
-    console.log(lesson);
     let cookieValue = Cookies.get(uuidName);
      if (cookieValue) {
       const decrypted = decryptToken(cookieValue, uuidSecret);
@@ -163,12 +181,21 @@ function EditLesson({ setEditLesson, id }: lessonModerators) {
           <p>streaming and platform fees: {fees.commission}/=</p>
           <p>Your total Earning: {fees.teacher_cost}/=</p>
         </div>
-        <p className="text-sm">
+        {!ispremium && <p className="text-sm">
           you want to earn more and set your own lesson prices become a{" "}
           <Link to="" className="underline text-yellow-300">
             premium teacher
           </Link>{" "}
-        </p>
+        </p>}
+        {ispremium && <div className="p-2 border my-4 text-grey rounded-md">
+          <h3 className="font-bold text-main">custom price</h3>
+          <p className="text-sm">if not edited we will resort to the default price</p>
+          <input type="number" className="input bg-transparent my-2 border border-gray-300 font-bold" onChange={(e)=>setLesson(prev =>({
+            ...prev,
+            lesson_price:Number(e.target.value)
+          }))} min={250} />
+          <p>Amount: {lesson.lesson_price}</p>
+          </div>}
         <span className="my-4 text-sm text-gray-300">
           you can choose a longer duration for more profit.
         </span>

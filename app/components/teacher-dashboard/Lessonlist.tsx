@@ -147,7 +147,10 @@ function Lessonlist({ setcreatelesson }: lessonModerators) {
                 className="flex items-center justify-around  my-8 hover:shadow-md transition-all p-4 shadow-sm w-full gap-2"
               >
                 <h1 className="text-sm sm:text-md">{trim(each_lesson.lesson_name)}</h1>
-                <div className="flex items-center justify-evenly text-sm gap-4">
+                {each_lesson.inprogress && <div className="flex items-center gap-4"><div className="flex  items-center gap-2"><div className=" w-2 h-2 animate-ping rounded-full bg-main delay-700">
+            <div className=" w-2 h-2 animate-ping rounded-full bg-main "></div>
+          </div> <span className="text-sm">live</span></div><button className=" bg-main text-white border-none h-[30px] rounded-md w-[80px]">join</button></div>}
+                {!each_lesson.inprogress && <div className="flex items-center justify-evenly text-sm gap-4">
                   <span>{formatDate(each_lesson.start_time)}</span>
                   <span className="flex items-center gap-2">
                     <LuClock10 />
@@ -173,7 +176,7 @@ function Lessonlist({ setcreatelesson }: lessonModerators) {
                       </li>
                     </ul>
                   </div>
-                </div>
+                </div>}
               </div>
             ))}
           </div>

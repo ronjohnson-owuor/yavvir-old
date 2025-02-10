@@ -41,12 +41,11 @@ function Fileupload({ close }: modalInterface) {
       }
 
       if (!response.proceed) {
-        console.log(response);
         toast.error(response.message);
         return;
       }
     } catch (error) {
-      console.log(error);
+      toast.error("there was an error try again later");
     }
   };
 

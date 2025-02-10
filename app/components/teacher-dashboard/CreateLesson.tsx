@@ -8,11 +8,12 @@ import useApi from "~/services/axios-service";
 import { lessonModerators } from "~/services/interfaces";
 import { decryptToken } from "~/services/tokenManager";
 
-function CreateLesson({setcreatelesson}:lessonModerators) {
+function CreateLesson({ setcreatelesson }: lessonModerators) {
   const { backendUrl, uuidSecret, uuidName } = useLoaderData<typeof loader>();
   const api = useApi(backendUrl);
 
   const [selected, setSelected] = useState<number>();
+  const [ispremium, setispremium] = useState<boolean>(false);
   const [fees, setFees] = useState({
     teacher_cost: 0,
     commission: 0,
@@ -65,7 +66,25 @@ function CreateLesson({setcreatelesson}:lessonModerators) {
 
   useEffect(() => {
     calculateFees();
+    getPremium();
   }, [selected]);
+
+  const getPremium = async () => {
+    let cookieValue = Cookies.get(uuidName);
+    if (cookieValue) {
+      const decrypted = decryptToken(cookieValue, uuidSecret);
+      const response = (
+        await api.get("teacher-api/is-premium", {
+          headers: {
+            Authorization: `Bearer ${decrypted}`,
+          },
+        })
+      ).data;
+
+      setispremium(response.premium);
+      return;
+    }
+  };
 
   const handleCreateLesson = async () => {
     if (!lesson.lesson_name) {
@@ -83,29 +102,31 @@ function CreateLesson({setcreatelesson}:lessonModerators) {
     if (cookieValue) {
       const decrypted = decryptToken(cookieValue, uuidSecret);
       const response = (
-        await api.post("teacher-api/create-lesson",lesson, {
+        await api.post("teacher-api/create-lesson", lesson, {
           headers: {
             Authorization: `Bearer ${decrypted}`,
           },
         })
       ).data;
 
-      if(response.proceed){
+      if (response.proceed) {
         toast.success(response.message);
         return;
-      }else{
+      } else {
         toast.error(response.message);
         return;
       }
-  }
-
+    }
   };
 
   return (
     <div className="p-4">
       <div className="flex items-center justify-between">
         <h1 className="font-bold text-[25px]">About this lesson</h1>
-        <IoClose className="font-bold text-xl"  onClick={()=>setcreatelesson && setcreatelesson(false)}/>
+        <IoClose
+          className="font-bold text-xl"
+          onClick={() => setcreatelesson && setcreatelesson(false)}
+        />
       </div>
 
       <label className="form-control w-full w-full">
@@ -170,12 +191,21 @@ function CreateLesson({setcreatelesson}:lessonModerators) {
           <p>streaming and platform fees: {fees.commission}/=</p>
           <p>Your total Earning: {fees.teacher_cost}/=</p>
         </div>
-        <p className="text-sm">
+        {ispremium && <div className="p-2 border my-4 text-grey rounded-md">
+          <h3 className="font-bold text-main">custom price</h3>
+          <p className="text-sm">if not edited we will resort to the default price</p>
+          <input type="number" className="input bg-transparent my-2 border border-gray-300 font-bold" onChange={(e)=>setLesson(prev =>({
+            ...prev,
+            lesson_price:Number(e.target.value)
+          }))} min={250} />
+          <p>Amount: {lesson.lesson_price}</p>
+          </div>}
+        {!ispremium && <p className="text-sm">
           you want to earn more and set your own lesson prices become a{" "}
-          <Link to="" className="underline text-yellow-300">
+          <span className="text-yellow-300">
             premium teacher
-          </Link>{" "}
-        </p>
+          </span>{" "}
+        </p>}
         <span className="my-4 text-sm text-gray-300">
           you can choose a longer duration for more profit.
         </span>
