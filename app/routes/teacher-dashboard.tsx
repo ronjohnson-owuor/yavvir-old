@@ -20,7 +20,7 @@ function Teacherdashboard() {
   return (
     <div className="w-full">
       <Navigation />
-      <div className="w-full md:px-4 my-4 min-h-[300px] grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="w-full md:px-4 my-4 grid grid-cols-1 md:grid-cols-2 gap-2">
         <Profile />
         <Finance />
         <Lessons />
