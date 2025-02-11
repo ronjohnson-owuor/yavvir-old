@@ -119,3 +119,10 @@ export  interface paymentUrl {
   message:string,
   url?:string
 }
+
+export interface lessonCreate {
+  lesson_name: string,
+  duration: number,
+  start_time: string,
+  lesson_price: number,
+}

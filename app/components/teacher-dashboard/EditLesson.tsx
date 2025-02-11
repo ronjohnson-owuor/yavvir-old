@@ -210,7 +210,7 @@ function EditLesson({ setEditLesson, id }: lessonModerators) {
           onChange={(e) =>
             setLesson((prev) => ({
               ...prev,
-              start_time: e.target.value,
+              start_time: new Date(e.target.value).toISOString(),
             }))
           }
           className="w-full my-4 h-[60px] text-gray-500 p-2 bg-transparent border border-gray-150 rounded-sm"

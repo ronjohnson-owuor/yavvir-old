@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 import { IoClose } from "react-icons/io5";
 import { loader } from "~/routes/teacher-dashboard";
 import useApi from "~/services/axios-service";
-import { lessonModerators } from "~/services/interfaces";
+import { lessonCreate, lessonModerators } from "~/services/interfaces";
 import { decryptToken } from "~/services/tokenManager";
 
 function CreateLesson({ setcreatelesson }: lessonModerators) {
@@ -19,10 +19,10 @@ function CreateLesson({ setcreatelesson }: lessonModerators) {
     commission: 0,
     total_fees: 0,
   });
-  const [lesson, setLesson] = useState({
+  const [lesson, setLesson] = useState<lessonCreate>({
     lesson_name: "",
     duration: 0,
-    start_time: "",
+    start_time:new Date(Date.now()).toISOString(),
     lesson_price: 0,
   });
 
@@ -97,7 +97,6 @@ function CreateLesson({ setcreatelesson }: lessonModerators) {
       toast.error("please choose the start time for your lesson");
       return;
     }
-
     let cookieValue = Cookies.get(uuidName);
     if (cookieValue) {
       const decrypted = decryptToken(cookieValue, uuidSecret);
@@ -220,7 +219,7 @@ function CreateLesson({ setcreatelesson }: lessonModerators) {
           onChange={(e) =>
             setLesson((prev) => ({
               ...prev,
-              start_time: e.target.value,
+              start_time: new Date(e.target.value).toISOString(),
             }))
           }
           className="w-full my-4 h-[60px] text-gray-500 p-2 bg-transparent border border-gray-150 rounded-sm"
