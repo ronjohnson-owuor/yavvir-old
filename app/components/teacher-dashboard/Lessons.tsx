@@ -78,7 +78,7 @@ function Lessons() {
   };
 
   return (
-    <div className="w-full shadow-sm overflow-y-scroll overflow-x-hidden">
+    <div className="w-full  shadow-sm overflow-y-scroll overflow-x-hidden">
       {createlesson && <CreateLesson setcreatelesson={setcreatelesson} />}
 
       {!createlesson && (
