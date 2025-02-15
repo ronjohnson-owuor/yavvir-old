@@ -4,6 +4,7 @@ export interface userdata {
   user?: user;
 }
 
+
 export interface user {
   username: string;
   email: string;
@@ -81,48 +82,58 @@ export interface lessons {
   lesson_name: string;
   lesson_uuid: string;
   start_time: string;
-  inprogress:boolean;
+  inprogress: boolean;
 }
 
-export  interface lessonModerators {
-  createlesson?:boolean,
-  setcreatelesson?:Function,
-  setEditLesson?:Function,
-  id?:number
-} 
+export interface lessonModerators {
+  createlesson?: boolean;
+  setcreatelesson?: Function;
+  setEditLesson?: Function;
+  id?: number;
+}
 
 export interface lessonPayload {
-  id:number,
-  lesson_name:string|null,
-  duration: number|null,
-  start_time: string|null,
-  lesson_price: number|null,
+  id: number;
+  lesson_name: string | null;
+  duration: number | null;
+  start_time: string | null;
+  lesson_price: number | null;
 }
 
 export interface reffInterface {
-  proceed:boolean,
-  reff?:string
+  proceed: boolean;
+  reff?: string;
 }
 
-export  interface lessonData {
-  proceed: boolean,
-  isPremium:boolean,
+export interface lessonData {
+  proceed: boolean;
+  isPremium: boolean;
   lesson: {
-      total: number,
-      expired:number,
-      pending: number
-  }
+    total: number;
+    expired: number;
+    pending: number;
+  };
 }
 
-export  interface paymentUrl {
-  proceed: boolean,
-  message:string,
-  url?:string
+export interface paymentUrl {
+  proceed: boolean;
+  message: string;
+  url?: string;
 }
 
 export interface lessonCreate {
-  lesson_name: string,
-  duration: number,
-  start_time: string,
-  lesson_price: number,
+  lesson_name: string;
+  duration: number;
+  start_time: string;
+  lesson_price: number;
 }
+
+export interface teacherFinance {
+  proceed: boolean;
+  balance: number;
+  pending: number;
+  failled: number;
+  total: number;
+  successfull: number;
+  message:string
+};
