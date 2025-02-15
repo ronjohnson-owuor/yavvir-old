@@ -29,7 +29,6 @@ function Finance() {
     if (cookieValue) {
       const decrypted = decryptToken(cookieValue, uuidSecret);
       let amount_data = { amount };
-      console.log(amount_data);
       const response = (
         await api.post("teacher-api/withdraw", amount_data, {
           headers: {
