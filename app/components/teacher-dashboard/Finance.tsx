@@ -1,4 +1,4 @@
-import { data, useLoaderData } from "@remix-run/react";
+import { data, Link, useLoaderData } from "@remix-run/react";
 import Cookies from "js-cookie";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -25,7 +25,7 @@ function Finance() {
 
   const requestWithdrawal = async () => {
     let cookieValue = Cookies.get(uuidName);
-    
+
     if (cookieValue) {
       const decrypted = decryptToken(cookieValue, uuidSecret);
       let amount_data = { amount };
@@ -97,9 +97,7 @@ function Finance() {
                 className="w-full h-[40px] bg-beige_light p-2
             rounded-sm"
                 type="number"
-                onChange={(e) =>
-                  setamount(Number(e.target.value))
-                }
+                onChange={(e) => setamount(Number(e.target.value))}
                 placeholder="enter amount"
               />
               <button
@@ -141,27 +139,36 @@ function Finance() {
             <p>{formartNumber(teacherfinance?.total ?? 0)}</p>
             <span>total widthdrawn</span>
           </div>
-          <button className="btn  w-full sm:w-[80%] mx-[10%]  hover:bg-main border-none  hover:text-white" onClick={()=>setisWidthdrawing(true)}>
+          <button
+            className="btn  w-full sm:w-[80%] mx-[10%]  hover:bg-main border-none  hover:text-white"
+            onClick={() => setisWidthdrawing(true)}
+          >
             request withdrawal
           </button>
           <div className="my-4 w-full ">
             <h3 className="my-2 sm:text-center my-4">withdrawal history</h3>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full">
-              <button className="bg-beige_light flex items-center gap-2 rounded-[20px] px-4 py-2 w-full  flex items-center justify-center">
-                {formartNumber(teacherfinance?.successfull ?? 0)}&nbsp;
-                <PiHandWithdrawLight />
-                success
-              </button>
-              <button className="bg-beige_light flex items-center gap-2 rounded-[20px] px-4 py-2 w-full  flex items-center justify-center">
-                {" "}
-                {formartNumber(teacherfinance?.pending ?? 0)}&nbsp;
-                <GiBackwardTime />
-                pending
-              </button>
-              <button className="bg-beige_light flex items-center gap-2 rounded-[20px] px-4 py-2 w-full  flex items-center justify-center">
-                {formartNumber(teacherfinance?.failled ?? 0)}&nbsp;
-                <GiPayMoney /> failed
-              </button>
+              <Link to="/payment-history/3">
+                <button className="bg-beige_light flex items-center gap-2 rounded-[20px] px-4 py-2 w-full  flex items-center justify-center">
+                  {formartNumber(teacherfinance?.successfull ?? 0)}&nbsp;
+                  <PiHandWithdrawLight />
+                  success
+                </button>
+              </Link>
+              <Link to="/payment-history/1">
+                <button className="bg-beige_light flex items-center gap-2 rounded-[20px] px-4 py-2 w-full  flex items-center justify-center">
+                  {" "}
+                  {formartNumber(teacherfinance?.pending ?? 0)}&nbsp;
+                  <GiBackwardTime />
+                  pending
+                </button>
+              </Link>
+              <Link to="/payment-history/2">
+                <button className="bg-beige_light flex items-center gap-2 rounded-[20px] px-4 py-2 w-full  flex items-center justify-center">
+                  {formartNumber(teacherfinance?.failled ?? 0)}&nbsp;
+                  <GiPayMoney /> failed
+                </button>
+              </Link>
             </div>
           </div>
         </div>

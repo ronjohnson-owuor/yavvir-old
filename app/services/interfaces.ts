@@ -4,6 +4,18 @@ export interface userdata {
   user?: user;
 }
 
+export interface paymentData {
+  id: number;
+  teacher_id: number;
+  status: number;
+  amount:number
+}
+
+export interface paymentDataResponse{
+  proceed:boolean,
+  message:string,
+  data:paymentData[]
+}
 
 export interface user {
   username: string;
@@ -135,5 +147,5 @@ export interface teacherFinance {
   failled: number;
   total: number;
   successfull: number;
-  message:string
-};
+  message: string;
+}
